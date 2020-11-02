@@ -54,6 +54,12 @@ function isTreeUnique(graph, isInTree) {
   return true
 }
 
+function puzzleCellsAdjacent(first, second, pillar) {
+  if (pillar && first.y == second.y && Math.abs(second.x - first.x) === puzzle.width - 1)
+    return true
+  return Math.abs(second.x - first.x) + Math.abs(second.y - first.y) === 1
+}
+
 window.bridgeTest = function(region, puzzle, color, bridges) {
   var nodes = region.cells.filter(pos => isCellBridgePathFriendly(puzzle, color, pos))
   var graph = Array.from(Array(nodes.length), () => [])
@@ -61,7 +67,7 @@ window.bridgeTest = function(region, puzzle, color, bridges) {
     var right = nodes[ir]
     for (var il = 0; il < ir; il++) {
       var left = nodes[il]
-      if (Math.abs(right.x - left.x) + Math.abs(right.y - left.y) === 1) {
+      if (puzzleCellsAdjacent(left, right, puzzle.pillar)) {
         graph[il].push(ir)
         graph[ir].push(il)
       }
