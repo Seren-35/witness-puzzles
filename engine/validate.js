@@ -227,6 +227,7 @@ function regionCheck(puzzle, region, quick) {
 
   var squares = []
   var stars = []
+  var bridges = {}
   var coloredObjects = {}
   var squareColor = undefined
 
@@ -276,6 +277,13 @@ function regionCheck(puzzle, region, quick) {
         pos.color = cell.color
         stars.push(pos)
       }
+
+      if (cell.type === 'bridge') {
+        if (bridges[cell.color] == undefined) {
+          bridges[cell.color] = []
+        }
+        bridges[cell.color].push(pos)
+      }
     }
   }
 
@@ -306,6 +314,37 @@ function regionCheck(puzzle, region, quick) {
           regionData.addInvalid(pos)
           if (quick) return regionData
         }
+      }
+    }
+  }
+
+  for (var color in bridges) {
+    var total = 0
+    var discardable = 0
+    for (var x = 1; x < puzzle.width; x += 2) {
+      for (var y = 1; y < puzzle.height; y += 2) {
+        var cell = puzzle.getCell(x, y)
+        if (cell != undefined) {
+          if (cell.type === 'bridge' && cell.color === color) total++
+          if (cell.type === 'nega') discardable++
+        }
+      }
+    }
+
+    if (bridges[color].length != total) {
+      if (bridges[color].length >= total - discardable) {
+        // TODO: Negations in other regions can validate the solution
+        for (var bridge of bridges[color]) {
+          regionData.addInvalid(bridge)
+        }
+      } else {
+        for (var bridge of bridges[color]) {
+          regionData.addVeryInvalid(bridge)
+        }
+      }
+    } else if (!window.bridgeTest(region, puzzle, color, bridges[color])) {
+      for (var bridge of bridges[color]) {
+        regionData.addInvalid(bridge)
       }
     }
   }

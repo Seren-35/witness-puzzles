@@ -29,6 +29,7 @@ window.drawSymbolWithSvg = function(svg, params) {
   else if (params.type === 'drag') drag(svg, params)
   else if (params.type === 'plus') plus(svg, params)
   else if (params.type === 'minus') minus(svg, params)
+  else if (params.type === 'bridge') bridge(svg, params)
 }
 
 function square(svg, params) {
@@ -341,6 +342,27 @@ function minus(svg, params) {
   horiz.setAttribute('width', params.width - 6)
   horiz.setAttribute('height', 2)
   horiz.setAttribute('fill', window.TEXT_COLOR)
+}
+
+function bridge(svg, params) {
+  var poly = createElement('polygon')
+  svg.appendChild(poly)
+  var points = [
+    '-10.58 14.56',
+    '-17.12 -5.56',
+    '0 -18',
+    '17.12 -5.56',
+    '10.58 14.56',
+    '5.29 7.28',
+    '8.56 -2.78',
+    '0 -9',
+    '-8.56 -2.78',
+    '-5.29 7.28',
+  ]
+  poly.setAttribute('transform', 'translate(' + (params.width/2 + params.x) + ', ' + (params.height/2 + params.y) + ')')
+  poly.setAttribute('points', points.join(', '))
+  poly.setAttribute('fill', params.color)
+  poly.setAttribute('class', params.class)
 }
 
 })

@@ -630,7 +630,7 @@ function onElementClicked(event, x, y) {
         }
       }
     }
-  } else if (['square', 'star', 'nega'].includes(activeParams.type)) {
+  } else if (['square', 'star', 'nega', 'bridge'].includes(activeParams.type)) {
     if (x%2 !== 1 || y%2 !== 1) return
     // Only remove the element if it's an exact match
     if (puzzle.grid[x][y] != undefined
@@ -714,6 +714,7 @@ var symbolData = {
   'rpoly': {'type':'poly', 'title':'Rotatable polyomino'},
   'ylop': {'type':'ylop', 'title':'Negation polyomino'},
   'rylop': {'type':'ylop', 'title':'Rotatable negation polyomino'},
+  'bridge': {'type':'bridge', 'title':'Bridge'},
 }
 function drawSymbolButtons() {
   var symbolTable = document.getElementById('symbolButtons')
